@@ -1,6 +1,34 @@
-# Research Corpus Distillation
+<h1 align="center">Research Corpus Distillation</h1>
 
-[English](README.md) | 中文
+<h3 align="center">本地优先的科研资料提取 · 各项目独立维护材料配置</h3>
+
+<p align="center">
+  将科研文档、表格和数据集转化为可追溯的 JSON，支持增量更新并保留证据历史。
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11+" />
+  <img src="https://img.shields.io/badge/Repository-Public-405D50" alt="公开仓库" />
+  <img src="https://img.shields.io/badge/Status-Development%20preview-D99A36" alt="开发预览版" />
+  <a href="https://github.com/zz11ss11zz/distill-research-corpus/actions/workflows/tests.yml"><img src="https://github.com/zz11ss11zz/distill-research-corpus/actions/workflows/tests.yml/badge.svg" alt="自动化测试状态" /></a>
+  <img src="https://img.shields.io/badge/Output-Traceable%20JSON-244652" alt="可追溯 JSON 输出" />
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <strong>中文</strong>
+</p>
+
+<p align="center">
+  <a href="CHANGELOG.md">更新记录</a> ·
+  <a href="#概述">概述</a> ·
+  <a href="#架构">架构</a> ·
+  <a href="#快速开始">快速开始</a> ·
+  <a href="#接入自己的项目">项目配置</a> ·
+  <a href="#输出与证据边界">证据边界</a> ·
+  <a href="#开发与测试">开发与测试</a>
+</p>
+
+## 概述
 
 面向科研资料库的本地优先提取引擎与 Codex Skill，使用**由各项目独立维护的材料配置**。
 

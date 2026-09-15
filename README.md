@@ -1,6 +1,34 @@
-# Research Corpus Distillation
+<h1 align="center">Research Corpus Distillation</h1>
 
-English | [中文](README.zh-CN.md)
+<h3 align="center">Local-first Research Extraction · Project-owned Material Profiles</h3>
+
+<p align="center">
+  Turn research documents, tables and datasets into traceable JSON with incremental updates and preserved evidence history.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11+" />
+  <img src="https://img.shields.io/badge/Repository-Public-405D50" alt="Public repository" />
+  <img src="https://img.shields.io/badge/Status-Development%20preview-D99A36" alt="Development preview" />
+  <a href="https://github.com/zz11ss11zz/distill-research-corpus/actions/workflows/tests.yml"><img src="https://github.com/zz11ss11zz/distill-research-corpus/actions/workflows/tests.yml/badge.svg" alt="Tests" /></a>
+  <img src="https://img.shields.io/badge/Output-Traceable%20JSON-244652" alt="Traceable JSON output" />
+</p>
+
+<p align="center">
+  <strong>English</strong> | <a href="README.zh-CN.md">中文</a>
+</p>
+
+<p align="center">
+  <a href="CHANGELOG.md">Changelog</a> ·
+  <a href="#overview">Overview</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#use-your-own-project">Project Profiles</a> ·
+  <a href="#outputs-and-trust-boundary">Evidence</a> ·
+  <a href="#development">Development</a>
+</p>
+
+## Overview
 
 A local-first extraction engine and Codex skill for research corpora, with **project-owned material profiles**.
 
