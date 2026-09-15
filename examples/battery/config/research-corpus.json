@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "material_system": "Lithium-ion battery demonstration",
+  "canonical_roots": {
+    "paper": "literature/papers"
+  },
+  "keyword_groups": {
+    "capacity": "specific capacity|discharge capacity",
+    "cycling": "capacity retention|cycle life",
+    "rate": "rate capability"
+  },
+  "formula_pattern": "\\b(?:LiFePO4|LiCoO2)\\b",
+  "value_unit_pattern": "\\d+(?:\\.\\d+)?\\s*(?:mAh\\s*g-1|%)",
+  "master_sources": [],
+  "evidence_rules": {
+    "candidate_status": "source_located_not_human_verified",
+    "reference": "evidence-rules.md",
+    "required_context": [
+      "composition",
+      "capacity_basis",
+      "voltage_window",
+      "rate",
+      "cycle_number",
+      "half_or_full_cell",
+      "temperature",
+      "source_page"
+    ]
+  }
+}

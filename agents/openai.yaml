@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Corpus Distillation"
+  short_description: "Extract research corpora with project-owned material profiles"
+  default_prompt: "Use $distill-research-corpus to extract the current project's corpus with its local material profile and preserve provenance."

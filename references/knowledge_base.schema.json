@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge_base.schema.json",
+  "title": "Research corpus distillation manifest",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "scope", "statistics", "artifacts", "quality_model"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0.0"},
+    "generated_at": {"type": "string"},
+    "scope": {
+      "type": "object",
+      "required": ["root", "canonical_categories", "policy"]
+    },
+    "statistics": {"type": "object"},
+    "artifacts": {
+      "type": "object",
+      "required": ["source_inventory", "deduplication", "documents", "evidence_facts", "datasets", "tabular_data", "master_collections"]
+    },
+    "quality_model": {
+      "type": "object",
+      "required": ["document_text", "fact_candidates", "dataset_profiles", "human_verification"]
+    }
+  },
+  "additionalProperties": true
+}

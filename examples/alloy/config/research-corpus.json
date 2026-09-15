@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "material_system": "Alloy mechanical-property demonstration",
+  "canonical_roots": {
+    "paper": "literature/papers"
+  },
+  "keyword_groups": {
+    "strength": "yield strength|tensile strength",
+    "ductility": "elongation"
+  },
+  "formula_pattern": "\\b(?:FeNi|TiAl)\\b",
+  "value_unit_pattern": "\\d+(?:\\.\\d+)?\\s*(?:MPa|GPa|%)",
+  "master_sources": [],
+  "evidence_rules": {
+    "candidate_status": "source_located_not_human_verified",
+    "reference": "evidence-rules.md",
+    "required_context": [
+      "composition",
+      "processing_state",
+      "test_temperature",
+      "strain_rate",
+      "loading_direction",
+      "source_page"
+    ]
+  }
+}

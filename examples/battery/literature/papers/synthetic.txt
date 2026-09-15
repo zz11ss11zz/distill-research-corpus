@@ -1,0 +1,3 @@
+SYNTHETIC TEST FIXTURE. These are invented values, not published measurements.
+
+LiFePO4 delivered a specific capacity of 155 mAh g-1 in an illustrative half-cell measurement.

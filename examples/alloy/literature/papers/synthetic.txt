@@ -1,0 +1,3 @@
+SYNTHETIC TEST FIXTURE. These are invented values, not published measurements.
+
+FeNi had a measured yield strength of 600 MPa in an illustrative tensile test.

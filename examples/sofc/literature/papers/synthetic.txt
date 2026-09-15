@@ -1,0 +1,3 @@
+SYNTHETIC TEST FIXTURE. These are invented values, not published measurements.
+
+La0.6Sr0.4Co0.2Fe0.8O3 showed a polarization resistance of 0.10 Ω cm2 at 650 °C in an illustrative symmetric-cell experiment.

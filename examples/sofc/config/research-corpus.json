@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "material_system": "SOFC oxide cathodes",
+  "canonical_roots": {
+    "paper": "literature/papers",
+    "dataset": "literature/datasets"
+  },
+  "inbox": "inbox",
+  "keyword_groups": {
+    "electrochemical_performance": "\\b(?:ASR|ASPR|Rp|polarization resistance|area[- ]specific resistance|power density|current density|OCV)\\b",
+    "transport": "conductivit|surface exchange|diffusion coefficient|\\bk\\*?chem\\b|\\bD\\*?chem\\b|activation energy",
+    "stability_degradation": "stability|degradation|durability|aging|ageing|thermal cycl|long[- ]term",
+    "poisoning_segregation": "chromium|Cr poisoning|sulfur|SO2|CO2|poisoning|segregation|SrCrO4|LaCrO3",
+    "structure_compatibility": "crystal structure|phase purity|compatibility|reaction product|perovskite|Ruddlesden|XRD|TEM|SEM",
+    "methods_models": "machine learning|random forest|neural network|DFT|density functional|descriptor|regression|cross[- ]validation"
+  },
+  "value_unit_pattern": "(?<![A-Za-z0-9])(?:~|≈|about\\s+|approximately\\s+)?[-+]?\\d+(?:\\.\\d+)?(?:\\s*[×x]\\s*10\\s*[-−^]?\\s*\\d+|[eE][-+]?\\d+)?\\s*(?:Ω\\s*[·.]?\\s*cm(?:2|²)|ohm\\s*[·.]?\\s*cm(?:2|²)|W\\s*[·.]?\\s*cm[-−^]?(?:2|²)|mW\\s*[·.]?\\s*cm[-−^]?(?:2|²)|S\\s*[·.]?\\s*cm[-−^]?1|eV|kJ\\s*[·.]?\\s*mol[-−^]?1|h(?:ours?)?|min(?:utes?)?|s(?:ec(?:onds?)?)?|%|ppm|Pa|kPa|MPa|GPa|μm|µm|nm|mm|cm)",
+  "formula_pattern": "\\b(?:[A-Z][a-z]?(?:\\d+(?:\\.\\d+)?)?){2,}(?:O\\d*(?:[+\\-−]?δ|[+\\-−]?x)?)?\\b",
+  "master_sources": [],
+  "evidence_rules": {
+    "candidate_status": "source_located_not_human_verified",
+    "reference": "evidence-rules.md",
+    "required_context": [
+      "exact_composition",
+      "property_definition",
+      "unit",
+      "temperature",
+      "atmosphere",
+      "cell_configuration",
+      "source_page",
+      "normalization_required_vs_applied"
+    ]
+  }
+}
