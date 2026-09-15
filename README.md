@@ -1,5 +1,7 @@
 # Research Corpus Distillation
 
+English | [中文](README.zh-CN.md)
+
 A local-first extraction engine and Codex skill for research corpora, with **project-owned material profiles**.
 
 Separate reusable extraction machinery from domain assumptions. The shared engine reads documents and tables, deduplicates by SHA-256, retains source locations, and refreshes candidates incrementally. Each project defines its source folders, material patterns, property themes, units, evidence requirements, and references to existing master collections.
