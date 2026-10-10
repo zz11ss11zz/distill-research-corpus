@@ -12,4 +12,4 @@ Use English for repository documentation, comments and interface metadata. User-
 
 Keep material-specific rules in project profiles or domain adapters. Never weaken evidence preservation or elevate machine candidates to verified facts to make a test pass. Avoid bundling copyrighted papers, real customer data, local usernames, secrets, or generated research outputs.
 
-Record user-visible changes in `CHANGELOG.md`. This initial development series uses version `0.1.0`; later releases should document profile/schema compatibility and engine cache invalidation. Public hosting is not a license decision; obtain approval before choosing or changing a repository license.
+Record user-visible changes in `CHANGELOG.md` and update `VERSION`. Document profile/schema compatibility and engine cache invalidation for each release. Public hosting is not a license decision; obtain approval before choosing or changing a repository license.

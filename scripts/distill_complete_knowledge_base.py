@@ -20,6 +20,7 @@ from typing import Any, Iterable, Iterator
 
 from openpyxl import load_workbook
 from pypdf import PdfReader
+from evidence_audit import build_context_checks, write_atomic
 
 
 SCHEMA_VERSION = "1.0.0"
@@ -1052,6 +1053,9 @@ def main() -> None:
         }
 
     source_hashes = {item["sha256"] for item in inventory if item["sha256"]}
+    context_checks = build_context_checks(
+        all_merged_facts, json.loads(documents_path.read_text(encoding="utf-8")), PROFILE)
+    write_atomic(output / "context_checks.json", context_checks)
     unique_source_category_counts = Counter(item["category"] for item in unique)
     manifest = {
         "$schema": "knowledge_base.schema.json",
@@ -1086,6 +1090,7 @@ def main() -> None:
             "unique_sources_by_category": dict(unique_source_category_counts),
             "output_records_by_category": dict(category_counts),
             "master_collection_count": len(master_collections),
+            "context_facts_needing_review": context_checks["statistics"]["facts_needing_review"],
             **tabular_statistics,
         },
         "artifacts": {
@@ -1096,6 +1101,7 @@ def main() -> None:
             "datasets": "datasets.json",
             "tabular_data": "tabular_data_manifest.json",
             "master_collections": "master_collections.json",
+            "context_checks": "context_checks.json",
             **({"evidence_fact_dispositions": "evidence_fact_dispositions.json"} if dispositions_path else {}),
         },
         "quality_model": {
@@ -1105,6 +1111,7 @@ def main() -> None:
             "fact_refresh_preservation": "Existing IDs, verified overlays and dispositions are retained; new reflowed sentences remain machine candidates.",
             "dataset_profiles": "Complete file/member/row counts with bounded column statistics; every unique CSV/XLSX cell is also converted to JSON under tabular/.",
             "human_verification": "not_complete_for_all_records",
+            "context_screening": "Candidate-text pattern matches and cached-page locators only; no scientific verification.",
         },
     }
     write_json(output / "manifest.json", manifest)

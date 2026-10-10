@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from evidence_audit import build_context_checks
 
 
 def load(path: Path):
@@ -28,6 +29,15 @@ def main() -> None:
     masters = load(output / "master_collections.json")["collections"]
 
     statistics = manifest["statistics"]
+    if "context_checks" in manifest["artifacts"]:
+        expected_checks = build_context_checks(facts, documents, {
+            "evidence_rules": manifest["scope"]["evidence_rules"],
+            "profile_sha256": manifest["scope"]["profile_sha256"],
+        })
+        if load(output / "context_checks.json") != expected_checks:
+            raise ValueError("Context checks are stale or modified")
+        if statistics["context_facts_needing_review"] != expected_checks["statistics"]["facts_needing_review"]:
+            raise ValueError("Context review count mismatch")
     source_ids = {item["source_id"] for item in documents + datasets}
     assert len(inventory) == statistics["source_file_entries"]
     assert len({item["sha256"] for item in inventory}) == statistics["source_unique_sha256"]

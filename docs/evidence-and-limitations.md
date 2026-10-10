@@ -18,6 +18,8 @@ The core retains previously verified payloads, legacy candidate identities and d
 
 Validators check identities, counts, coverage/failure counters and master hashes. They are not scientific accuracy or completeness benchmarks. The provided battery and alloy regexes are narrow synthetic demonstrations. Production use requires source-grounded evaluation against the target material literature.
 
+Context checks additionally screen project-required fields in candidate text and validate cached-page locators. A missing match is local to that fragment, not evidence that the full paper omitted the condition. Conclusion bindings validate explicit fact relations, locations and original source hashes while preserving review states and declared conflicts. They do not verify semantic entailment, discover every conflict or establish that an inference is correct. See [context and conclusions](../references/context-and-conclusions.md).
+
 ## Operational limits
 
 - Inventory uses ripgrep's default hidden/ignore handling. Do not hide intended sources or rely on a Git-ignored corpus without checking the preview.

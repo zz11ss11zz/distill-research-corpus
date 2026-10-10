@@ -34,7 +34,7 @@ A local-first extraction engine and Codex skill for research corpora, with **pro
 
 Separate reusable extraction machinery from domain assumptions. The shared engine reads documents and tables, deduplicates by SHA-256, retains source locations, and refreshes candidates incrementally. Each project defines its source folders, material patterns, property themes, units, evidence requirements, and references to existing master collections.
 
-**Status: development preview (0.1.0).** The included battery, alloy and SOFC corpora are synthetic fixtures. Machine candidates are not verified scientific measurements. No research papers, private datasets, credentials, or deployment-specific master pointers are included.
+**Status: development preview (0.2.0).** The included battery, alloy and SOFC corpora are synthetic fixtures. Machine candidates are not verified scientific measurements. No research papers, private datasets, credentials, or deployment-specific master pointers are included.
 
 ## Architecture
 
@@ -112,6 +112,19 @@ You can also run the Python scripts directly without Codex. Keep a version-contr
 The engine emits a manifest, inventory, deduplication map, document page text, candidate facts, dataset profiles, table conversions and master-collection hash references. PDF page locations and source spans support later auditing; text-file page `1` denotes its extracted text record rather than a physical PDF page.
 
 New facts remain `source_located_not_human_verified`. The profile's `required_context` and evidence reference describe what a reviewer must check; regex screening does not certify those conditions. Existing verified records and decision histories are preserved, not independently re-verified. See [evidence and limitations](docs/evidence-and-limitations.md).
+
+## Context checks and conclusion evidence
+
+Normal extraction now emits `context_checks.json`: project-required fields are screened using optional `evidence_rules.context_patterns`, with explicit missing-match and unconfigured states. Matches concern candidate text only; they do not verify scientific conditions. Existing profiles work without edits.
+
+Bind requested downstream conclusions to actual fact IDs, source hashes, page/span locations and review states. Support, contradiction, background evidence and declared conflicts remain explicit; inferences require a rationale. This checks provenance, not conclusion correctness.
+
+```sh
+python scripts/bind_research_conclusions.py --root examples/battery --input conclusions.example.json
+python scripts/bind_research_conclusions.py --root examples/battery --input conclusions.example.json --validate-only
+```
+
+Run the battery extraction first. For your own project, supply a project-owned conclusion input. See [context and conclusion contracts](references/context-and-conclusions.md) for configuration, states, input format and stale-binding detection.
 
 ## Development
 
