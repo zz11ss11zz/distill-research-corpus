@@ -3,6 +3,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from evidence_audit import validate_context_rules
 
 SUPPORTED_CATEGORIES = {"paper", "thesis", "patent", "dataset"}
 
@@ -38,6 +39,7 @@ def load_profile(root: Path, path: Path | None = None) -> dict:
     if not data.get("value_unit_pattern") or not data.get("formula_pattern"):
         raise ValueError("Configure value_unit_pattern and formula_pattern explicitly")
     evidence = data.get("evidence_rules", {})
+    validate_context_rules(evidence)
     if evidence.get("candidate_status") != "source_located_not_human_verified":
         raise ValueError("A profile cannot promote machine candidates to verified facts")
     if evidence.get("reference"):

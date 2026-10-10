@@ -32,6 +32,10 @@ Windows OCR is available through the bundled orchestrator. Unsupported or unread
 
 ## Evidence and delivery
 
+Every normal extraction also writes `context_checks.json`. Project `required_context` fields are screened using optional `context_patterns`; missing patterns remain `not_configured`. Pattern hits concern only the candidate evidence text, not scientific validity or material-to-value pairing. Unlocated conditions remain open review items, not a claim that the whole paper omitted them.
+
+When a task produces downstream research conclusions, bind each conclusion to current `fact_id` references using `scripts/bind_research_conclusions.py`. Keep source facts, inferences and recommendations explicit; record support, contradiction and background relations without resolving scientific conflicts automatically. Read [references/context-and-conclusions.md](references/context-and-conclusions.md) for profile fields, conclusion input and validation commands. Binding validates references and source bytes, never promotes facts or verifies the conclusion. Do not draft unrequested conclusions or bypass project writing approval requirements.
+
 - Every new deterministic fact remains `source_located_not_human_verified`. Source locations support later checking; they do not establish scientific correctness.
 - Domain-specific acceptance, normalization, formal master publication and verification belong to the project's skill and evidence rules. This core does not supply a universal promotion script.
 - Do not overwrite prior verified facts, erase decisions, or replace project publishers. Use dated snapshots where the project requires them.

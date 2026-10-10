@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "conclusions": [
+    {
+      "conclusion_id": "synthetic-capacity-example",
+      "text": "The synthetic fixture states a LiFePO4 capacity of 155 mAh g-1 in an illustrative half-cell measurement. This is invented test data, not a published result.",
+      "claim_type": "source_fact",
+      "evidence": [
+        {"fact_id": "fact_0998428d0b1fe15027f5", "relation": "supports"}
+      ]
+    }
+  ]
+}

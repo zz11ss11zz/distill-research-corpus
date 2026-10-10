@@ -18,6 +18,8 @@ The default output root is `outputs/json/knowledge_distillation/`.
 | `tabular/*.json` | Complete table rows and cells, one JSON per unique source |
 | `ocr_pages.json` | OCR text keyed by source hash and page |
 | `master_collections.json` | Existing authoritative JSON collections referenced by hash |
+| `context_checks.json` | Per-fact required-field screening, matched text, unresolved review items and input fingerprints |
+| `conclusion_bindings.json` | Opt-in downstream conclusion references, verification states, context checks and declared conflicts |
 
 ## Identity and deduplication
 
@@ -31,6 +33,7 @@ The default output root is `outputs/json/knowledge_distillation/`.
 - `source_located_not_human_verified`: deterministic extraction with a source and page locator; not a formal verified measurement.
 - Existing project-specific verified/page-anchored records retain their stronger status and are referenced as master collections.
 - OCR text is evidence-location support, not proof that chemical symbols, subscripts or units were recognized perfectly.
+- Context pattern matches and conclusion reference validation do not strengthen a fact's status. Human and agent review states remain distinct. See [context and conclusions](context-and-conclusions.md) for the new additive artifact contracts and stale-binding validation.
 
 ## Large-data rule
 

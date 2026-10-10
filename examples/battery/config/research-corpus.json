@@ -15,6 +15,13 @@
   "evidence_rules": {
     "candidate_status": "source_located_not_human_verified",
     "reference": "evidence-rules.md",
+    "context_patterns": {
+      "composition": "\\bLi(?:FePO4|CoO2)\\b",
+      "capacity_basis": "mAh\\s*g-1",
+      "half_or_full_cell": "\\b(?:half|full)[ -]cell\\b",
+      "temperature": "\\b\\d+(?:\\.\\d+)?\\s*(?:K\\b|°\\s*C\\b)",
+      "rate": "\\b\\d+(?:\\.\\d+)?\\s*C\\s*(?:rate|discharge|charge)\\b"
+    },
     "required_context": [
       "composition",
       "capacity_basis",

@@ -44,7 +44,15 @@ def main():
             manifest=json.loads((target/"outputs/json/knowledge_distillation/manifest.json").read_text(encoding="utf-8"))
             jsonschema.validate(manifest,schema)
             assert manifest["statistics"]["evidence_fact_candidates"] > 0,example
-    print("Repository metadata, Markdown links, Python syntax and all three synthetic example pipelines passed.")
+            claims = target / "conclusions.example.json"
+            if claims.exists():
+                command = [sys.executable, "-B", str(ROOT / "scripts/bind_research_conclusions.py"),
+                           "--root", str(target), "--input", "conclusions.example.json"]
+                for extra in ([], ["--validate-only"]):
+                    checked = subprocess.run(command + extra, capture_output=True, text=True, encoding="utf-8")
+                    if checked.returncode:
+                        raise RuntimeError(checked.stdout + checked.stderr)
+    print("Repository metadata, Markdown links, Python syntax, three synthetic pipelines and conclusion binding passed.")
 
 if __name__ == "__main__":
     main()

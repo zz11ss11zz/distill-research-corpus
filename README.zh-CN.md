@@ -34,7 +34,7 @@
 
 通用引擎负责读取文档和表格、按 SHA-256 去重、保留来源定位，并增量更新提取候选。各项目分别定义资料目录、材料识别规则、性质主题、单位、证据要求，以及已有正式数据集合的引用。
 
-**当前状态：开发预览版（0.1.0）。** 仓库中的电池、合金和 SOFC 示例均使用合成测试数据。机器提取候选不等于已核验的科学测量结果。本仓库不包含真实论文、私有数据集、凭据或实际项目的主库指针。
+**当前状态：开发预览版（0.2.0）。** 仓库中的电池、合金和 SOFC 示例均使用合成测试数据。机器提取候选不等于已核验的科学测量结果。本仓库不包含真实论文、私有数据集、凭据或实际项目的主库指针。
 
 ## 架构
 
@@ -114,6 +114,21 @@ python scripts/run_incremental_distillation.py --root /path/to/project
 引擎生成清单、文件索引、去重映射、文档逐页文字、候选事实、数据集结构描述、表格转换结果，以及正式数据集合的哈希引用。PDF 页码和原文片段定位用于后续审计；文本文件的第 `1` 页表示其提取文本记录，并非真实 PDF 页码。
 
 新增事实始终标为 `source_located_not_human_verified`。配置中的 `required_context` 和证据说明文件描述的是核验人员需要检查的条件；正则筛选不会自动证明这些条件已满足。已有核验记录和处理历史会被保留，但这不代表系统重新独立核验了它们。详见[证据模型与局限](docs/evidence-and-limitations.md)（英文）。
+
+## 条件检查与结论证据绑定
+
+正常提取会生成 `context_checks.json`。在项目配置中，为 `required_context` 添加可选的 `evidence_rules.context_patterns`，即可区分候选片段内已定位、未定位和未配置检测规则的条件。未定位只针对当前片段，不表示整篇论文未报告；匹配也不代表科学条件已经核验。旧配置无需修改即可继续运行。
+
+对已获授权起草的下游结论，可绑定实际 `fact_id`、原文件哈希、页码／片段与原有核验状态，分别记录支持、反证、背景证据和来源冲突。推断与建议需要说明理由。工具验证引用与文件一致性，不自动核验结论或晋升机器候选。
+
+先运行电池示例的提取，再执行：
+
+```sh
+python scripts/bind_research_conclusions.py --root examples/battery --input conclusions.example.json
+python scripts/bind_research_conclusions.py --root examples/battery --input conclusions.example.json --validate-only
+```
+
+实际项目使用自己的结论 JSON。配置字段、状态、输入格式和过期检查见[条件与结论证据契约](references/context-and-conclusions.md)（英文）。
 
 ## 开发与测试
 
