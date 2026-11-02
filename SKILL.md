@@ -1,6 +1,6 @@
 ---
 name: distill-research-corpus
-description: Incrementally extract local research documents, tables and datasets into deduplicated, page-traceable JSON using a project-owned material profile. Use for corpus extraction, OCR and refresh; use ingestion skills for adding references and project skills for domain-specific evidence acceptance.
+description: Incrementally extract local research documents, tables and datasets into deduplicated, page-traceable JSON using a project-owned material profile. Use for corpus extraction, OCR and refresh; use the bundled organize-literature subskill for literature organization and intake and project skills for domain-specific evidence acceptance.
 ---
 
 # Research corpus extraction core
@@ -12,7 +12,7 @@ Use this shared engine for document text, OCR, table conversion, hashes, increme
 1. Read the current project rules and its domain extraction skill when present.
 2. Read `config/research-corpus.json`, or the explicitly supplied `--config` path. Do not infer directories or property definitions from another project. A missing or invalid profile is an error, not permission to create a parallel corpus.
 3. Read [references/project-profile.md](references/project-profile.md) only when creating or changing a profile. Agree on scientifically meaningful fields and conditions; regex matches remain candidates.
-4. Finish authorized intake before extraction. Do not move unrelated inbox files to clear a check. Run the project's intake preflight when it has stronger requirements.
+4. For requested PDF classification, naming, deduplication or library registration, use [organize-literature](skills/organize-literature/SKILL.md). It is optional for already prepared corpora and can also run independently. Finish authorized intake before extraction. Do not move unrelated inbox files to clear a check. Run the project's intake preflight when it has stronger requirements.
 
 ## Run
 

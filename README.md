@@ -34,7 +34,7 @@ A local-first extraction engine and Codex skill for research corpora, with **pro
 
 Separate reusable extraction machinery from domain assumptions. The shared engine reads documents and tables, deduplicates by SHA-256, retains source locations, and refreshes candidates incrementally. Each project defines its source folders, material patterns, property themes, units, evidence requirements, and references to existing master collections.
 
-**Status: development preview (0.2.0).** The included battery, alloy and SOFC corpora are synthetic fixtures. Machine candidates are not verified scientific measurements. No research papers, private datasets, credentials, or deployment-specific master pointers are included.
+**Status: development preview (0.3.0).** The included battery, alloy and SOFC corpora are synthetic fixtures. Machine candidates are not verified scientific measurements. No research papers, private datasets, credentials, or deployment-specific master pointers are included.
 
 ## Architecture
 
@@ -139,3 +139,13 @@ The GitHub Actions workflow runs the fixture suite and repository checks on Wind
 ## License
 
 No open-source license has been selected yet. Public visibility alone does not grant an open-source license. Contributions should not import third-party code without recording its license and provenance.
+
+## Optional literature organization subskill
+
+`skills/organize-literature/` combines local PDF classification/naming and verified library intake. It is self-contained: copy that folder alone to your skills directory for standalone use. When the whole repository is installed as `distill-research-corpus`, the parent can load its nested `SKILL.md` before extraction; no separate installation is needed. Choose one installation layout to avoid duplicate discoverable copies.
+
+File organization preserves source files by default. Organization defaults to <project>/literature/{paper,patent,thesis} and maintains literature/文献总账.xlsx. Legacy registration supports project CSV/Markdown/JSON adapters; neither mode performs scientific verification. The project's existing registry and corpus source roots remain authoritative. See [the subskill](skills/organize-literature/SKILL.md) for modes and preview/apply commands.
+
+![Literature intake workflow](skills/organize-literature/docs/workflow.svg)
+
+[Standalone literature organizer](https://github.com/zz11ss11zz/organize-literature) · [Usage guide](skills/organize-literature/README.md)
