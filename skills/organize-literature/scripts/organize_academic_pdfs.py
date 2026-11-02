@@ -355,7 +355,9 @@ LEDGER_HEADERS = ["分类", "标题", "作者", "年份", "期刊或学校", "DO
 def prepare_ledger(output: Path, plan: list[dict[str, Any]]) -> dict[str, list[Any]]:
     from openpyxl import load_workbook
     rows = {}
-    ledger = output / "文献总账.xlsx"
+    ledger = output / "literature-ledger.xlsx"
+    if not ledger.exists():
+        ledger = output / "文献总账.xlsx"  # Read legacy ledgers without deleting them.
     if ledger.exists():
         workbook = load_workbook(ledger)
         try:
@@ -412,7 +414,7 @@ def write_ledger(output: Path, rows: dict[str, list[Any]]) -> None:
     os.close(handle)
     try:
         workbook.save(temporary)
-        os.replace(temporary, output / "文献总账.xlsx")
+        os.replace(temporary, output / "literature-ledger.xlsx")
     finally:
         workbook.close()
         Path(temporary).unlink(missing_ok=True)

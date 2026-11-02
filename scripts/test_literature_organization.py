@@ -95,15 +95,16 @@ class LiteratureOrganizationTests(unittest.TestCase):
         self.assertFalse(output.exists())
         self.run_helper('organize_academic_pdfs.py', [*args, '--apply'])
         self.assertTrue(all((output / category).is_dir() for category in ('paper', 'patent', 'thesis')))
-        book = load_workbook(output / '文献总账.xlsx')
+        book = load_workbook(output / 'literature-ledger.xlsx')
         self.assertEqual(book.active.max_row, 2)
         self.assertEqual(book.active['H2'].value, 'paper/Fixture Journal - 2026 - Synthetic literature fixture.pdf')
         self.assertEqual(book.active['I2'].value, hashlib.sha256(self.original).hexdigest())
         book.close()
-        self.pdf.unlink()  # later run sees no source; preserve existing ledger
+        (output / "literature-ledger.xlsx").rename(output / "文献总账.xlsx")
+        self.pdf.unlink()  # exercise legacy-ledger migration without source files
         result = self.run_helper('organize_academic_pdfs.py', [*args, '--apply'])
         self.assertEqual(json.loads(result.stdout)['scanned'], 0)
-        book = load_workbook(output / '文献总账.xlsx')
+        book = load_workbook(output / 'literature-ledger.xlsx')
         self.assertEqual(book.active.max_row, 2)
         book.close()
 
