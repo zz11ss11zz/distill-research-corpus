@@ -15,7 +15,7 @@ literature/
 ├── paper/      # 期刊 - 年份 - 标题.pdf
 ├── patent/     # 公开号 - 年份.pdf（也支持显式启用的专利 Markdown）
 ├── thesis/     # 学校 - 年份 - 标题.pdf
-├── 文献总账.xlsx
+├── literature-ledger.xlsx
 └── _organization_manifest.json
 ```
 

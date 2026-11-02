@@ -148,7 +148,7 @@ GitHub Actions 会在 Windows 和 Ubuntu 上运行测试样本及仓库检查。
 
 `skills/organize-literature/` 合并了 PDF 分类命名、去重及文献核验入库。单独复制该目录即可作为独立 Skill 使用；完整安装本仓库时，父 Skill 可在蒸馏前加载这个子 Skill，无需另装。两种安装方式择一，避免重复发现同一份能力。
 
-默认保留源文件；默认生成项目 literature 下的 paper、patent、thesis 分类目录及文献总账.xlsx；旧入库适配器保留 CSV、Markdown、JSON 同步能力。已有项目台账、编号与蒸馏源目录优先，登记入库不等于科学核验。详见[文献整理入口](skills/organize-literature/SKILL.md)。
+默认保留源文件；默认生成项目 literature 下的 paper、patent、thesis 分类目录及literature-ledger.xlsx；旧入库适配器保留 CSV、Markdown、JSON 同步能力。已有项目台账、编号与蒸馏源目录优先，登记入库不等于科学核验。详见[文献整理入口](skills/organize-literature/SKILL.md)。
 
 ![Literature intake workflow](skills/organize-literature/docs/workflow.svg)
 

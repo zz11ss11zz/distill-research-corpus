@@ -8,7 +8,7 @@
 
 ## What it does
 
-Classifies local scholarly documents, detects duplicates, copies them into a consistent layout, and maintains `文献总账.xlsx`. It combines the former personal `organize-academic-pdfs` and `ingest-literature` skills. It can run independently or as an optional intake subskill of [distill-research-corpus](https://github.com/zz11ss11zz/distill-research-corpus).
+Classifies local scholarly documents, detects duplicates, copies them into a consistent layout, and maintains `literature-ledger.xlsx`. It combines the former personal `organize-academic-pdfs` and `ingest-literature` skills. It can run independently or as an optional intake subskill of [distill-research-corpus](https://github.com/zz11ss11zz/distill-research-corpus).
 
 The default is the current project (or working directory) with this output:
 
@@ -18,7 +18,7 @@ project/
     ├── paper/       # <venue> - <year> - <title>.pdf
     ├── patent/      # <publication-number> - <year>.<ext>
     ├── thesis/      # <school> - <year> - <title>.pdf
-    ├── 文献总账.xlsx
+    ├── literature-ledger.xlsx
     └── _organization_manifest.json
 ```
 
@@ -61,7 +61,7 @@ Repeat the reviewed command with `--apply` to copy files and update the ledger. 
 
 ## Excel master ledger
 
-`文献总账.xlsx` contains category, title, authors, year, venue/school, DOI, patent number, relative file path, SHA-256 and original path. It has filters, a frozen header and readable column widths. Incremental runs preserve prior rows; they do not remove missing documents from the ledger automatically. An existing incompatible workbook schema is rejected for adaptation rather than overwritten. Keep the workbook closed while updating it.
+`literature-ledger.xlsx` contains category, title, authors, year, venue/school, DOI, patent number, relative file path, SHA-256 and original path. It has filters, a frozen header and readable column widths. Incremental runs preserve prior rows; they do not remove missing documents from the ledger automatically. An existing incompatible workbook schema is rejected for adaptation rather than overwritten. Keep the workbook closed while updating it.
 
 ## Existing project library registration
 

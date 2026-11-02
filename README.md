@@ -144,7 +144,7 @@ No open-source license has been selected yet. Public visibility alone does not g
 
 `skills/organize-literature/` combines local PDF classification/naming and verified library intake. It is self-contained: copy that folder alone to your skills directory for standalone use. When the whole repository is installed as `distill-research-corpus`, the parent can load its nested `SKILL.md` before extraction; no separate installation is needed. Choose one installation layout to avoid duplicate discoverable copies.
 
-File organization preserves source files by default. Organization defaults to <project>/literature/{paper,patent,thesis} and maintains literature/文献总账.xlsx. Legacy registration supports project CSV/Markdown/JSON adapters; neither mode performs scientific verification. The project's existing registry and corpus source roots remain authoritative. See [the subskill](skills/organize-literature/SKILL.md) for modes and preview/apply commands.
+File organization preserves source files by default. Organization defaults to <project>/literature/{paper,patent,thesis} and maintains literature/literature-ledger.xlsx. Legacy registration supports project CSV/Markdown/JSON adapters; neither mode performs scientific verification. The project's existing registry and corpus source roots remain authoritative. See [the subskill](skills/organize-literature/SKILL.md) for modes and preview/apply commands.
 
 ![Literature intake workflow](skills/organize-literature/docs/workflow.svg)
 
