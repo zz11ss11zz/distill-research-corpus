@@ -41,12 +41,6 @@ python <skill>/scripts/organize_academic_pdfs.py --root . --no-crossref --apply
 
 指定目录时使用 `--source <下载目录> --output <整理目的目录>`；指定核实过的元数据可使用 `--overrides <metadata.json>`，格式见[覆盖记录示例](references/metadata-overrides.md)。源文献应位于目的目录之外。`--no-crossref` 为离线模式，去掉后可按 DOI 查询 Crossref；缺少分类依据时保留待核，不编造信息。
 
-## 与入库、蒸馏的关系
-
-默认交付是分类后的文件和 Excel 总账。旧的 `ingest_literature.py` 用于已有项目的 CSV、Markdown、JSON 台账同步及编号，按需采用，不能另建平行台账。整理与登记是两个操作，组合时要核对最终 PDF 路径和台账引用。
-
-父 Skill 可先完成整理，再按项目的 research-corpus.json 进行预检和证据蒸馏。登记编号不是科学核验，也不等于论文中的引用序号。论文撰写、引用排版和 OCR 不是此独立 Skill 的主要职责。
-
 ## 边界与验证
 
 默认复制并保留原文件；只有明确要求时才删除精确重复项。同名不同内容、元数据未解决会阻止执行。Excel 应在更新前关闭；整批复制和台账写入不是单一事务，中断时须核对部分完成项。增量保留的总账行不会随文件缺失自动删除。
