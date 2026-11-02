@@ -50,3 +50,9 @@ Use a discovered Python executable and absolute helper paths:
 ```
 
 Both default to preview; add `--apply` only for the reviewed authorized scope. `--no-crossref` makes organization offline; omit it only when metadata lookup is appropriate. Organization needs `pypdf` for PDF metadata extraction and `openpyxl` for its Excel ledger; ingestion uses the Python standard library and has helper-specific DOI/PDF limitations described in its reference.
+
+## Supporting information
+
+Include verified SI in `paper/`, named `SI - <venue> - <year> - <main-article-title>.<ext>`. For multiple attachments add ` - 01`, ` - 02` before the original extension. Preserve spreadsheets, archives and other supported attachment formats; do not extract archives. Keep ledger-backed attachment names stable on incremental runs.
+
+The ledger distinguishes main documents and supplements and records `related_paper`. Verify a parent DOI or explicit main-article relationship before apply; unresolved relationships remain pending. A shared DOI is not a reason to merge SI with its main article or merge byte-distinct attachments. Only exact same-parent, same-format SI copies are duplicates. Metadata overrides accept `supplementary` (boolean), `related_paper` (path or DOI URL), and optional positive `attachment_number`. Do not infer an association solely from similar filenames. Old ten-column ledgers are upgraded while preserving existing rows.

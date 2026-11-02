@@ -69,6 +69,24 @@ The optional [legacy ingestion mode](references/ingestion.md) verifies bibliogra
 
 This skill organizes sources; manuscript writing, citation formatting, OCR and scientific evidence extraction are separate tasks. The parent corpus skill runs its own profile-based preflight and extraction after authorized intake is complete. File registration does not verify a scientific claim.
 
+
+## Supporting information (SI)
+
+Store SI alongside the main article under `paper/`, with a clear prefix:
+
+```text
+paper/
+├── Nature - 2024 - Article title.pdf
+├── SI - Nature - 2024 - Article title - 01.pdf
+└── SI - Nature - 2024 - Article title - 02.xlsx
+```
+
+A single attachment may omit the number. Preserve the original extension, including PDF, spreadsheets and ZIP archives; archives are copied, not extracted. Multiple attachments receive distinct numbers, while existing ledger-backed filenames stay stable in incremental runs. A shared DOI never makes SI a duplicate of its main article. Only byte-identical SI copies for the same parent and format can be deduplicated.
+
+The ledger adds document type and related main article columns. A unique matching main-article DOI links to its planned file path; when the main article is absent, a verified parent DOI or an explicit `related_paper` value records the relationship. Ambiguous or missing metadata stays pending. Filename markers identify SI candidates; verify the association before applying. Ordinary spreadsheets/archives are not imported merely because of their extension. For unmarked attachments set `supplementary: true` in the metadata overrides; use `supplementary: false` to correct a false filename match.
+
+Existing ten-column ledgers are upgraded by appending the new columns; prior records are retained. Source files and legacy ledgers are preserved.
+
 ## Safety and limitations
 
 - Default apply copies documents and preserves source bytes. Delete exact duplicates only when explicitly requested.

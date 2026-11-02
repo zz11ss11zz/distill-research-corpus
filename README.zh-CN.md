@@ -34,7 +34,7 @@
 
 通用引擎负责读取文档和表格、按 SHA-256 去重、保留来源定位，并增量更新提取候选。各项目分别定义资料目录、材料识别规则、性质主题、单位、证据要求，以及已有正式数据集合的引用。
 
-**当前状态：开发预览版（0.3.0）。** 仓库中的电池、合金和 SOFC 示例均使用合成测试数据。机器提取候选不等于已核验的科学测量结果。本仓库不包含真实论文、私有数据集、凭据或实际项目的主库指针。
+**当前状态：开发预览版（0.3.1）。** 仓库中的电池、合金和 SOFC 示例均使用合成测试数据。机器提取候选不等于已核验的科学测量结果。本仓库不包含真实论文、私有数据集、凭据或实际项目的主库指针。
 
 ## 架构
 
@@ -153,3 +153,5 @@ GitHub Actions 会在 Windows 和 Ubuntu 上运行测试样本及仓库检查。
 ![Literature intake workflow](skills/organize-literature/docs/workflow.svg)
 
 [Standalone literature organizer](https://github.com/zz11ss11zz/organize-literature) · [Usage guide](skills/organize-literature/README.md)
+
+SI 与正文一起归入 paper/，增加 SI 文件名前缀、保留附件原格式，并在总账中关联正文。

@@ -135,7 +135,12 @@ def find_override(path: Path, roots: list[Path], overrides: dict[str, dict[str, 
     return {}
 
 
-def scan_files(roots: list[Path], include_markdown: bool) -> list[Path]:
+def is_supplement(path: Path) -> bool:
+    name = path.name.lower()
+    return any(marker in name for marker in SI_MARKERS) or bool(re.search(r"(?:^|[ _-])si(?:[ _.-]|$)", name))
+
+
+def scan_files(roots: list[Path], include_markdown: bool, overrides: dict | None = None) -> list[Path]:
     allowed = {".pdf"} | ({".md"} if include_markdown else set())
     result: list[Path] = []
     for root in roots:
@@ -145,7 +150,8 @@ def scan_files(roots: list[Path], include_markdown: bool) -> list[Path]:
         if not root.exists():
             raise FileNotFoundError(root)
         for path in root.rglob("*"):
-            if path.is_file() and path.suffix.lower() in allowed:
+            attachment = path.suffix.lower() in {".xlsx", ".xls", ".csv", ".zip", ".docx", ".txt", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".md"} and (is_supplement(path) or find_override(path, roots, overrides or {}).get("supplementary") is True)
+            if path.is_file() and (path.suffix.lower() in allowed or attachment):
                 result.append(path)
     return sorted(set(result), key=lambda item: str(item).lower())
 
@@ -155,10 +161,6 @@ def obvious_exclusion(path: Path) -> str | None:
     lower_path = str(path).lower()
     if lower_parts & EXCLUDED_DIRS:
         return "excluded directory"
-    if any(marker in lower_path for marker in SI_MARKERS):
-        return "supplementary or source data"
-    if path.name.lower().startswith("si ") or re.search(r"(?:^|[_-])si(?:[_-]|\.)", path.name.lower()):
-        return "supplementary information"
     return None
 
 
@@ -187,7 +189,7 @@ def infer_formatted_filename(path: Path) -> dict[str, Any]:
     parent = path.parent.name.lower()
     if parent == "paper" and len(parts) == 3:
         return {"category": "paper", "venue": parts[0], "year": int(parts[1]), "title": parts[2]}
-    if path.parent.name == "学位论文" and len(parts) == 3:
+    if parent in {"thesis", "学位论文"} and len(parts) == 3:
         return {"category": "thesis", "school": parts[0], "year": int(parts[1]), "title": parts[2]}
     if parent == "patent":
         return {"category": "patent", "patent_number": parts[0], "year": int(parts[1])}
@@ -265,6 +267,8 @@ def classify(path: Path, roots: list[Path], overrides: dict[str, dict[str, Any]]
     item: dict[str, Any] = {"source": str(path), "extension": path.suffix.lower(), "hash": sha256(path)}
     formatted = infer_formatted_filename(path)
     override = find_override(path, roots, overrides)
+    supplementary = override.get("supplementary", is_supplement(path)) is True
+    item["supplementary"] = supplementary
     if override.get("category") == "exclude":
         return {**item, **override, "status": "excluded"}
     exclusion = obvious_exclusion(path)
@@ -275,13 +279,15 @@ def classify(path: Path, roots: list[Path], overrides: dict[str, dict[str, Any]]
         text = path.read_text(encoding="utf-8", errors="replace")
         metadata: dict[str, Any] = {}
         error = None
+    elif path.suffix.lower() != ".pdf":
+        text, metadata, error = "", {}, None
     else:
         text, metadata, error = extract_pdf(path, max_pages)
         if error:
             item["warning"] = error
     merged = {**formatted, **override}
     lower = (str(path) + "\n" + text[:8000]).lower()
-    category = merged.get("category")
+    category = "paper" if supplementary else merged.get("category")
     if not category:
         if "patent" in {part.lower() for part in path.parts} or "发明专利" in text[:3000] or extract_patent_number(text, path):
             category = "patent"
@@ -329,6 +335,8 @@ def choose_canonical(items: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def bibliographic_key(item: dict[str, Any]) -> str:
+    if item.get("supplementary"):
+        return "si:" + item["hash"] + ":" + str(item.get("related_paper", "")) + item["extension"]
     if item.get("doi"):
         return f"paper:doi:{clean_doi(item['doi'])}"
     if item["category"] == "patent":
@@ -338,6 +346,13 @@ def bibliographic_key(item: dict[str, Any]) -> str:
 
 def target_for(item: dict[str, Any], output: Path, limit: int) -> Path:
     extension = item["extension"]
+    if item.get("preserved_target"):
+        return output / item["preserved_target"]
+    if item.get("supplementary"):
+        title = item["title"]
+        if item.get("attachment_number"):
+            title += f" - {int(item['attachment_number']):02d}"
+        return output / "paper" / output_filename(["SI", item["venue"], item["year"]], title, extension, limit)
     if item["category"] == "paper":
         name = output_filename([item["venue"], item["year"]], item["title"], extension, limit)
         return output / "paper" / name
@@ -349,7 +364,8 @@ def target_for(item: dict[str, Any], output: Path, limit: int) -> Path:
 
 
 
-LEDGER_HEADERS = ["分类", "标题", "作者", "年份", "期刊或学校", "DOI", "专利号", "文件路径", "SHA256", "原始路径"]
+LEGACY_LEDGER_HEADERS = ["分类", "标题", "作者", "年份", "期刊或学校", "DOI", "专利号", "文件路径", "SHA256", "原始路径"]
+LEDGER_HEADERS = LEGACY_LEDGER_HEADERS + ["文献类型", "关联正文"]
 
 
 def prepare_ledger(output: Path, plan: list[dict[str, Any]]) -> dict[str, list[Any]]:
@@ -363,9 +379,9 @@ def prepare_ledger(output: Path, plan: list[dict[str, Any]]) -> dict[str, list[A
         try:
             sheet = workbook["文献总账"]
             values = list(sheet.values)
-            if not values or list(values[0]) != LEDGER_HEADERS:
+            if not values or list(values[0]) not in (LEDGER_HEADERS, LEGACY_LEDGER_HEADERS):
                 raise ValueError("Existing literature ledger has an unsupported schema; preserve it and adapt first")
-            rows = {str(row[7]): list(row) for row in values[1:] if row[7]}
+            rows = {str(row[7]): list(row) + (["正文", ""] if len(row) == 10 else []) for row in values[1:] if row[7]}
         finally:
             workbook.close()
     for item in plan:
@@ -376,7 +392,8 @@ def prepare_ledger(output: Path, plan: list[dict[str, Any]]) -> dict[str, list[A
         rows[relative] = [item["category"], item.get("title", ""), str(authors),
                           item.get("year", ""), item.get("venue", item.get("school", "")),
                           item.get("doi", ""), item.get("patent_number", ""),
-                          relative, item["hash"], item["source"]]
+                          relative, item["hash"], item["source"],
+                          "补充材料" if item.get("supplementary") else "正文", item.get("related_paper", "")]
     return rows
 
 
@@ -398,18 +415,18 @@ def write_ledger(output: Path, rows: dict[str, list[Any]]) -> None:
         cell.font = Font(bold=True, color="FFFFFF")
         cell.fill = PatternFill("solid", fgColor="246B5C")
     sheet.freeze_panes = "A2"
-    widths = [14, 52, 28, 12, 28, 30, 24, 65, 68, 65]
-    for column, width in zip("ABCDEFGHIJ", widths):
+    widths = [14, 52, 28, 12, 28, 30, 24, 65, 68, 65, 18, 65]
+    for column, width in zip("ABCDEFGHIJKL", widths):
         sheet.column_dimensions[column].width = width
     for row in sheet.iter_rows(min_row=2):
         for cell in row:
             cell.alignment = Alignment(vertical="top", wrap_text=True)
     if rows:
-        table = Table(displayName="LiteratureLedger", ref=f"A1:J{sheet.max_row}")
+        table = Table(displayName="LiteratureLedger", ref=f"A1:L{sheet.max_row}")
         table.tableStyleInfo = TableStyleInfo(name="TableStyleMedium2", showRowStripes=True)
         sheet.add_table(table)
     else:
-        sheet.auto_filter.ref = "A1:J1"
+        sheet.auto_filter.ref = "A1:L1"
     handle, temporary = tempfile.mkstemp(suffix=".xlsx", dir=output)
     os.close(handle)
     try:
@@ -420,6 +437,63 @@ def write_ledger(output: Path, rows: dict[str, list[Any]]) -> None:
         Path(temporary).unlink(missing_ok=True)
 
 
+def resolve_supplements(records: list[dict[str, Any]], output: Path, limit: int) -> None:
+    mains = [item for item in records if not item.get("supplementary") and item.get("category") == "paper" and item["status"] == "ready"]
+    existing = prepare_ledger(output, [])
+    groups = defaultdict(list)
+    for item in records:
+        if not item.get("supplementary") or item["status"] == "excluded":
+            continue
+        matches = [main for main in mains if item.get("doi") and main.get("doi") == item["doi"]]
+        if len(matches) == 1:
+            main = matches[0]
+            for key in ("venue", "year", "title"):
+                item[key] = main[key]
+            item["related_paper"] = target_for(main, output, limit).relative_to(output).as_posix()
+        elif not item.get("related_paper") and item.get("doi"):
+            item["related_paper"] = "https://doi.org/" + item["doi"]
+        item["status"] = "ready" if all(item.get(k) for k in ("venue", "year", "title", "related_paper")) else "unresolved"
+        if item["status"] != "ready":
+            item["reason"] = "Supplement metadata and parent-paper relationship need verification"
+            continue
+        groups[(item["venue"], str(item["year"]), item["title"], item["related_paper"])].append(item)
+    for members in groups.values():
+        used = set()
+        first = members[0]
+        # Existing filenames remain stable when a later batch adds an attachment.
+        family = []
+        for relative, row in existing.items():
+            path = Path(relative)
+            if not path.parts or path.parts[0] != "paper" or ".." in path.parts or not path.name.startswith("SI - "):
+                continue
+            if str(row[1]) == first["title"] and str(row[3]) == str(first["year"]) and str(row[4]) == first["venue"]:
+                family.append((relative, row))
+                match = re.search(r" - (\d+)$", path.stem)
+                used.add(int(match.group(1)) if match else 1)
+                for item in members:
+                    if row[8] == item["hash"] and path.suffix.lower() == item["extension"]:
+                        item["preserved_target"] = relative
+        for item in members:
+            if item.get("attachment_number"):
+                number = int(item["attachment_number"])
+                if number <= 0:
+                    raise ValueError("attachment_number must be a positive integer")
+                used.add(number)
+        if len({(i["hash"], i["extension"]) for i in members}) > 1 or family:
+            assigned = {}
+            for item in sorted(members, key=lambda value: value["source"].lower()):
+                if item.get("preserved_target") or item.get("attachment_number"):
+                    continue
+                identity = (item["hash"], item["extension"])
+                if identity not in assigned:
+                    number = 1
+                    while number in used:
+                        number += 1
+                    used.add(number)
+                    assigned[identity] = number
+                item["attachment_number"] = assigned[identity]
+
+
 def main() -> int:
     args = parse_args()
     project = Path(args.root).resolve()
@@ -428,9 +502,10 @@ def main() -> int:
     if any(not path.is_dir() for path in roots):
         raise ValueError("Source directories must exist")
     overrides = load_overrides(args.overrides)
-    paths = [path for path in scan_files(roots, args.include_patent_markdown)
+    paths = [path for path in scan_files(roots, args.include_patent_markdown, overrides)
              if not path.resolve().is_relative_to(output)]
     records = [classify(path, roots, overrides, args.max_pdf_pages, not args.no_crossref) for path in paths]
+    resolve_supplements(records, output, args.max_filename_chars)
 
     ready = [item for item in records if item["status"] == "ready"]
     unresolved = [item for item in records if item["status"] == "unresolved"]
@@ -438,7 +513,8 @@ def main() -> int:
 
     hash_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for item in ready:
-        hash_groups[item["hash"]].append(item)
+        role = "si:" + str(item.get("related_paper", "")) + item["extension"] if item.get("supplementary") else "main:"
+        hash_groups[role + item["hash"]].append(item)
     exact_duplicates = [group for group in hash_groups.values() if len(group) > 1]
     hash_canonical = [choose_canonical(group) for group in hash_groups.values()]
 

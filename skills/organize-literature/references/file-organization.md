@@ -36,11 +36,11 @@ Use the bundled script for deterministic preview, copying, renaming, and validat
 - Preview is mandatory before `--apply`; the Agent reviews it as a technical check. Existing user authorization for the unchanged copy/rename scope remains valid.
 - Never delete source files merely because they share a DOI; different publisher versions can have different hashes.
 - Use `--delete-exact-duplicates` only when the user explicitly requests deletion and the preview identifies byte-identical files. Keep at least one canonical copy.
-- Exclude SI, supporting information, Source Data, reports, contracts, project plans, and datasets unless the user explicitly expands the destination taxonomy.
+- Include verified SI and article-associated Source Data in paper/ with an SI prefix and parent relationship; preserve attachment formats. Exclude unrelated reports, contracts, project plans and datasets unless requested.
 - Local organization alone does not include downloading missing full text. List citation-only sources as unavailable locally; when the user also requests acquisition, route that separate phase to literature ingestion and continue within its authorized scope.
 
 ## Script Notes
 
 - The script uses `pypdf` for PDF text and metadata extraction when available.
 - Crossref lookup is enabled by default for detected DOIs; pass `--no-crossref` for offline or filename-driven organization.
-- The apply run writes `_organization_manifest.json` under the destination root for auditability.
+- The apply run writes `_organization_manifest.json` and `literature-ledger.xlsx` under the destination root. The ledger records document type and related main article.
