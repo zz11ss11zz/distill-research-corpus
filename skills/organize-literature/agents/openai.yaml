@@ -1,0 +1,4 @@
+interface:
+  display_name: "Literature Organizer"
+  short_description: "Organize scholarly PDFs and maintain an Excel literature ledger"
+  default_prompt: "Use $organize-literature to organize these documents and update the project's literature library within the requested scope."

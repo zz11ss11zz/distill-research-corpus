@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+<title id="title">Literature organization workflow</title><desc id="desc">Local PDFs are previewed, classified and deduplicated, then copied into paper, patent and thesis folders with an Excel ledger. Corpus extraction is optional.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#568779" stroke-width="2"/></marker></defs>
+<rect width="1200" height="660" rx="24" fill="#f3f7f5"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="54" y="65" font-size="15" font-weight="700" fill="#527268">LOCAL FILES · TRACEABLE CATALOG</text><text x="54" y="112" font-size="36" font-weight="700" fill="#173f35">From downloaded papers to an organized library</text>
+<text x="54" y="146" font-size="19" fill="#536d64">Use your directory, or default to the current project. Preview before applying.</text>
+<g fill="white" stroke="#c7d8d0" stroke-width="2"><rect x="54" y="200" width="235" height="225" rx="16"/><rect x="340" y="200" width="300" height="225" rx="16"/><rect x="693" y="200" width="450" height="225" rx="16"/></g>
+<g fill="#173f35" font-size="23" font-weight="700"><text x="78" y="242">01  Sources</text><text x="366" y="242">02  Review the plan</text><text x="720" y="242">03  Apply organization</text></g>
+<g fill="#536d64" font-size="18"><text x="78" y="289">Local PDF collections</text><text x="78" y="324">Optional patent text</text><text x="78" y="379">Source files preserved</text><text x="366" y="289">Classify and verify metadata</text><text x="366" y="324">Detect duplicates / conflicts</text><text x="366" y="379">Uncertain items stay pending</text><text x="720" y="282">project / literature /</text><text x="744" y="318">paper /     patent /     thesis /</text><text x="744" y="355">Literature master ledger (.xlsx)</text><text x="744" y="391">File paths + source hashes</text></g>
+<g stroke="#568779" stroke-width="3" marker-end="url(#arrow)"><path d="M295 312H327"/><path d="M646 312H680"/></g>
+<rect x="54" y="465" width="1089" height="135" rx="16" fill="#173f35"/>
+<text x="80" y="504" font-size="22" font-weight="700" fill="#fff">Two ways to use the same skill</text><text x="80" y="542" font-size="18" fill="#cde3d9">Standalone: organize-literature</text><text x="565" y="542" font-size="18" fill="#cde3d9">Optional next step: distill-research-corpus</text><text x="80" y="574" font-size="17" fill="#a9c8bb">Organization and catalog registration do not establish scientific verification.</text>
+</g></svg>

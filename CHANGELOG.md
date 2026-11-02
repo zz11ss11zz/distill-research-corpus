@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 — 2026-11-02
+
+- Bundle the optional, independently usable organize-literature intake subskill.
+- Default organization to project/literature/{paper,patent,thesis} with an incremental Excel master ledger.
+- Preserve source files, block path conflicts, and retain the legacy project-catalog registration adapter.
+- Add offline intake regressions, bilingual documentation and a workflow diagram.
+- Compatibility: extraction schemas, engine cache fingerprints and existing project profiles are unchanged. Intake is optional; no source relocation or scientific promotion happens automatically.
+
 ## 0.2.0 — 2026-10-10
 
 - Added per-fact `context_checks.json` to normal extraction, with project-owned context patterns, explicit unlocated/unconfigured states and cached-page/span validation.
