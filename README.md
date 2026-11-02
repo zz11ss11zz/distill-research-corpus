@@ -34,7 +34,7 @@ A local-first extraction engine and Codex skill for research corpora, with **pro
 
 Separate reusable extraction machinery from domain assumptions. The shared engine reads documents and tables, deduplicates by SHA-256, retains source locations, and refreshes candidates incrementally. Each project defines its source folders, material patterns, property themes, units, evidence requirements, and references to existing master collections.
 
-**Status: development preview (0.3.0).** The included battery, alloy and SOFC corpora are synthetic fixtures. Machine candidates are not verified scientific measurements. No research papers, private datasets, credentials, or deployment-specific master pointers are included.
+**Status: development preview (0.3.1).** The included battery, alloy and SOFC corpora are synthetic fixtures. Machine candidates are not verified scientific measurements. No research papers, private datasets, credentials, or deployment-specific master pointers are included.
 
 ## Architecture
 
@@ -149,3 +149,5 @@ File organization preserves source files by default. Organization defaults to <p
 ![Literature intake workflow](skills/organize-literature/docs/workflow.svg)
 
 [Standalone literature organizer](https://github.com/zz11ss11zz/organize-literature) · [Usage guide](skills/organize-literature/README.md)
+
+SI is included under paper/ with an SI filename prefix, original attachment format, and a parent-article ledger link.

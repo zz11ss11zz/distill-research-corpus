@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 — 2026-11-02
+
+- Include verified supporting information beside main articles with SI-prefixed filenames and original attachment formats.
+- Preserve distinct same-DOI attachments, stable incremental names, and main/SI separation during deduplication.
+- Append document type and related-main-article ledger columns, upgrading existing ten-column ledgers without dropping rows.
+- Add attachment, duplicate, incremental naming, unresolved relationship and ledger migration regressions.
+- Extraction schemas and cache fingerprints remain unchanged.
+
 ## 0.3.0 — 2026-11-02
 
 - Bundle the optional, independently usable organize-literature intake subskill.

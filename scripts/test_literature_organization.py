@@ -108,6 +108,69 @@ class LiteratureOrganizationTests(unittest.TestCase):
         self.assertEqual(book.active.max_row, 2)
         book.close()
 
+    def test_si_files_preserve_formats_main_and_incremental_names(self):
+        import zipfile
+        from openpyxl import Workbook, load_workbook
+        (self.source / 'SI-info.pdf').write_bytes(self.original)  # even identical bytes must not replace main
+        (self.source / 'SI-info-copy.pdf').write_bytes(self.original)
+        book = Workbook()
+        book.active.append(['fixture', 1])
+        book.save(self.source / 'SI-data.xlsx')
+        book.close()
+        with zipfile.ZipFile(self.source / 'SI-package.zip', 'w') as archive:
+            archive.writestr('fixture.txt', 'synthetic attachment')
+        metadata = {'category': 'paper', 'venue': 'Fixture Journal', 'year': 2026,
+                    'title': 'Synthetic literature fixture', 'doi': '10.1234/fixture'}
+        overrides = {p.name: metadata for p in self.source.iterdir()}
+        self.overrides.write_text(json.dumps(overrides), encoding='utf-8')
+        output = self.root / 'literature'
+        args = ['--source', self.source, '--output', output, '--overrides', self.overrides, '--no-crossref', '--apply']
+        result = self.run_helper('organize_academic_pdfs.py', args)
+        self.assertEqual(json.loads(result.stdout)['planned_unique'], 4)
+        names = {p.name for p in (output / 'paper').iterdir()}
+        self.assertIn('Fixture Journal - 2026 - Synthetic literature fixture.pdf', names)
+        self.assertEqual(len([n for n in names if n.startswith('SI - ')]), 3)
+        self.assertTrue(any(n.endswith('01.xlsx') for n in names))
+        self.assertTrue(any(n.endswith('02.pdf') for n in names))
+        self.assertTrue(any(n.endswith('03.zip') for n in names))
+        book = load_workbook(output / 'literature-ledger.xlsx')
+        si_rows = [row for row in book.active.values if row[10] == '补充材料']
+        self.assertEqual(len(si_rows), 3)
+        self.assertTrue(all(row[11] == 'paper/Fixture Journal - 2026 - Synthetic literature fixture.pdf' for row in si_rows))
+        book.close()
+        (self.source / 'SI-z-extra.csv').write_text('fixture,2\n', encoding='utf-8')
+        overrides['SI-z-extra.csv'] = metadata
+        self.overrides.write_text(json.dumps(overrides), encoding='utf-8')
+        self.run_helper('organize_academic_pdfs.py', args)
+        updated = {p.name for p in (output / 'paper').iterdir()}
+        self.assertTrue(names <= updated)
+        self.assertTrue(any(n.endswith('04.csv') for n in updated))
+
+    def test_unlinked_si_remains_pending(self):
+        (self.source / 'SI-unknown.zip').write_bytes(b'fixture attachment')
+        output = self.root / 'literature'
+        self.run_helper('organize_academic_pdfs.py', [
+            '--source', self.source, '--output', output, '--overrides', self.overrides,
+            '--no-crossref', '--apply'], expected=2)
+        self.assertFalse(output.exists())
+
+    def test_legacy_ten_column_ledger_is_upgraded(self):
+        from openpyxl import Workbook, load_workbook
+        output = self.root / 'literature'
+        output.mkdir()
+        book = Workbook()
+        book.active.title = '文献总账'
+        book.active.append(['分类', '标题', '作者', '年份', '期刊或学校', 'DOI', '专利号', '文件路径', 'SHA256', '原始路径'])
+        book.active.append(['paper', 'Older fixture', '', 2025, 'Fixture', '', '', 'paper/old.pdf', 'old-hash', 'old-source'])
+        book.save(output / 'literature-ledger.xlsx')
+        book.close()
+        self.run_helper('organize_academic_pdfs.py', [
+            '--source', self.source, '--output', output, '--overrides', self.overrides, '--no-crossref', '--apply'])
+        book = load_workbook(output / 'literature-ledger.xlsx')
+        self.assertEqual(book.active.max_column, 12)
+        self.assertEqual(book.active.max_row, 3)
+        book.close()
+
     def test_thesis_and_patent_filenames(self):
         for category, metadata, relative in [
             ('thesis', {'school': 'Example University', 'year': 2026, 'title': 'Fixture thesis'},
